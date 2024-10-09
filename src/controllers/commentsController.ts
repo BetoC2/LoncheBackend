@@ -4,7 +4,7 @@ import HTTP_STATUS_CODES from '../types/http-status-codes';
 
 class CommentsController {
   create(req: Request, res: Response) {
-    const { content } = req.body;
+    const content = req.body;
 
     commentModel
       .create({ content })
