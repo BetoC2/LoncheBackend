@@ -4,7 +4,7 @@ import LANGUAGES from '../types/languages';
 interface City extends Document {
   name: string;
   region: string;
-  country: boolean;
+  country: string;
   language: LANGUAGES;
 }
 
@@ -18,7 +18,7 @@ const CitySchema = new Schema({
     required: true,
   },
   country: {
-    type: Boolean,
+    type: String,
     required: true,
   },
   language: {
