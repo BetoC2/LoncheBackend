@@ -7,12 +7,17 @@ class CommentsController {
     const content = req.body;
 
     commentModel
-      .create(content )
+      .create(content)
       .then((comment) => {
         return res.status(HTTP_STATUS_CODES.CREATED).json(comment);
       })
       .catch((error) => {
         console.log(error);
+        if (error.name === 'ValidationError') {
+          return res
+            .status(HTTP_STATUS_CODES.BAD_REQUEST)
+            .json({ message: 'Validation error', errors: error.errors });
+        }
         return res
           .status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
           .json({ message: 'Error creating comment' });
@@ -72,6 +77,11 @@ class CommentsController {
       })
       .catch((error) => {
         console.log(error);
+        if (error.name === 'ValidationError') {
+          return res
+            .status(HTTP_STATUS_CODES.BAD_REQUEST)
+            .json({ message: 'Validation error', errors: error.errors });
+        }
         return res
           .status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
           .json({ message: 'Error updating comment' });
