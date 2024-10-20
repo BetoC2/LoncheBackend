@@ -15,7 +15,7 @@ class UsersController {
         console.log(error);
         return res
           .status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
-          .json({ message: 'Something went wrong' });
+          .json({ message: 'Internal Server Error' });
       });
   }
 
@@ -36,7 +36,7 @@ class UsersController {
         console.log(error);
         return res
           .status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
-          .json({ message: 'Something went wrong' });
+          .json({ message: 'Internal Server Error' });
       });
   }
 
@@ -80,7 +80,7 @@ class UsersController {
         }
         return res
           .status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
-          .json({ message: 'Something went wrong' });
+          .json({ message: 'Internal Server Error' });
       });
   }
 
@@ -90,21 +90,14 @@ class UsersController {
 
     userModel
       .findByIdAndUpdate(id, userData, { new: true })
+      .select('-password')
       .then((updatedUser) => {
         if (!updatedUser) {
           return res
             .status(HTTP_STATUS_CODES.NOT_FOUND)
             .json({ message: 'User not found' });
         }
-        return res.status(HTTP_STATUS_CODES.OK).json(
-          updatedUser.toObject({
-            versionKey: false,
-            transform: (doc, ret) => {
-              delete ret.password;
-              return ret;
-            },
-          })
-        );
+        return res.status(HTTP_STATUS_CODES.OK).json(updatedUser);
       })
       .catch((error) => {
         console.log(error);
@@ -115,7 +108,7 @@ class UsersController {
         }
         return res
           .status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
-          .json({ message: 'Something went wrong' });
+          .json({ message: 'Internal Server Error' });
       });
   }
 
@@ -123,27 +116,20 @@ class UsersController {
     const { id } = req.params;
     userModel
       .findByIdAndDelete(id)
+      .select('-password')
       .then((deletedUser) => {
         if (!deletedUser) {
           return res
             .status(HTTP_STATUS_CODES.NOT_FOUND)
             .json({ message: 'User not found' });
         }
-        return res.status(HTTP_STATUS_CODES.OK).json(
-          deletedUser.toObject({
-            versionKey: false,
-            transform: (doc, ret) => {
-              delete ret.password;
-              return ret;
-            },
-          })
-        );
+        return res.status(HTTP_STATUS_CODES.OK).json(deletedUser);
       })
       .catch((error) => {
         console.log(error);
         return res
           .status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
-          .json({ message: 'Something went wrong' });
+          .json({ message: 'Internal Server Error' });
       });
   }
 }
