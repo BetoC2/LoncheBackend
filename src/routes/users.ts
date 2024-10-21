@@ -16,6 +16,8 @@ const usersRoutes = Router();
  *           schema:
  *             type: object
  *             properties:
+ *               id_city:
+ *                type: string
  *               username:
  *                 type: string
  *               email:
@@ -30,6 +32,7 @@ const usersRoutes = Router();
  *                 type: string
  *                 format: date
  *             required:
+ *               - id_city
  *               - username
  *               - email
  *               - password
