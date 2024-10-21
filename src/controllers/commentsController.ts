@@ -81,6 +81,11 @@ class CommentsController {
           return res
             .status(HTTP_STATUS_CODES.BAD_REQUEST)
             .json({ message: 'Validation error', errors: error.errors });
+        } else if (error.code === 11000) {
+          const duplicatedKey = Object.keys(error.keyValue)[0];
+          return res
+            .status(HTTP_STATUS_CODES.CONFLICT)
+            .json({ message: `${duplicatedKey} field already in use` });
         }
         return res
           .status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
