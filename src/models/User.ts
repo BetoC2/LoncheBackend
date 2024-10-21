@@ -1,25 +1,9 @@
 import mongoose, { Document, Schema } from 'mongoose';
+import IUser from '../types/User';
 import ROLES from '../types/roles';
 import USER_STATUS from '../types/userStatus';
 
-interface User extends Document {
-  id_city: Schema.Types.ObjectId;
-  followers?: Schema.Types.ObjectId[];
-  following?: Schema.Types.ObjectId[];
-  username: string;
-  email: string;
-  password?: string;
-  name: string;
-  lastname: string;
-  birthdate: Date;
-  role?: ROLES;
-  status?: USER_STATUS;
-  profilePic?: string;
-  bio?: string;
-  joinDate?: Date;
-  numFollowers: number;
-  numFollowing: number;
-}
+interface User extends IUser, Document {}
 
 const UserSchema = new Schema({
   id_city: {
