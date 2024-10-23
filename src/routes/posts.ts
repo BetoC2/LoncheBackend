@@ -45,7 +45,7 @@ postsRoutes.post('/', postsController.create);
  *       500:
  *         description: Error getting posts
  */
-postsRoutes.get('/', postsController.getPosts);
+postsRoutes.get('/', postsController.getAll);
 
 /**
  * @swagger
@@ -72,7 +72,7 @@ postsRoutes.get('/', postsController.getPosts);
  *       500:
  *         description: Error getting post
  */
-postsRoutes.get('/:id', postsController.getPostByID);
+postsRoutes.get('/:id', postsController.getById);
 
 /**
  * @swagger
@@ -107,7 +107,7 @@ postsRoutes.get('/:id', postsController.getPostByID);
  *       500:
  *         description: Error updating post
  */
-postsRoutes.put('/:id', postsController.updatePost);
+postsRoutes.put('/:id', postsController.update);
 
 /**
  * @swagger
@@ -130,6 +130,6 @@ postsRoutes.put('/:id', postsController.updatePost);
  *       500:
  *         description: Error deleting post
  */
-postsRoutes.delete('/:id', postsController.deletePost);
+postsRoutes.delete('/:id', postsController.delete);
 
 export default postsRoutes;

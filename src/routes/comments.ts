@@ -52,7 +52,7 @@ commentsRoutes.post('/', commentsController.create);
  *       500:
  *         description: Internal server error
  */
-commentsRoutes.get('/', commentsController.getComments);
+commentsRoutes.get('/', commentsController.getAll);
 
 /**
  * @swagger
@@ -75,7 +75,7 @@ commentsRoutes.get('/', commentsController.getComments);
  *       500:
  *         description: Internal server error
  */
-commentsRoutes.get('/:id', commentsController.getCommentByID);
+commentsRoutes.get('/:id', commentsController.getById);
 
 /**
  *  @swagger
@@ -117,7 +117,7 @@ commentsRoutes.get('/:id', commentsController.getCommentByID);
  *        500:
  *          description: Internal server error
  */
-commentsRoutes.put('/:id', commentsController.updateComment);
+commentsRoutes.put('/:id', commentsController.update);
 
 /**
  * @swagger
@@ -140,6 +140,6 @@ commentsRoutes.put('/:id', commentsController.updateComment);
  *       500:
  *         description: Internal server error
  */
-commentsRoutes.delete('/:id', commentsController.deleteComment);
+commentsRoutes.delete('/:id', commentsController.delete);
 
 export default commentsRoutes;

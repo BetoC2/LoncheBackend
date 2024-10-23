@@ -1,5 +1,8 @@
 import { Router } from 'express';
 import citiesController from '../controllers/citiesController';
+import permissionsMiddleware from '../middlewares/Permissions';
+import authMiddleware from '../middlewares/auth';
+import ROLES from '../types/roles';
 
 const citiesRoutes = Router();
 
@@ -51,7 +54,7 @@ citiesRoutes.post('/', citiesController.create);
  *       500:
  *         description: Internal server error
  */
-citiesRoutes.get('/', citiesController.getCities);
+citiesRoutes.get('/', citiesController.getAll);
 
 /**
  * @swagger
@@ -74,7 +77,7 @@ citiesRoutes.get('/', citiesController.getCities);
  *       500:
  *         description: Internal server error
  */
-citiesRoutes.get('/:id', citiesController.getCityByID);
+citiesRoutes.get('/:id', citiesController.getById);
 
 /**
  *  @swagger
@@ -114,7 +117,7 @@ citiesRoutes.get('/:id', citiesController.getCityByID);
  *        500:
  *          description: Internal server error
  */
-citiesRoutes.put('/:id', citiesController.updateCity);
+citiesRoutes.put('/:id', citiesController.update);
 
 /**
  * @swagger
@@ -137,6 +140,6 @@ citiesRoutes.put('/:id', citiesController.updateCity);
  *       500:
  *         description: Internal server error
  */
-citiesRoutes.delete('/:id', citiesController.deleteCity);
+citiesRoutes.delete('/:id', citiesController.delete);
 
 export default citiesRoutes;

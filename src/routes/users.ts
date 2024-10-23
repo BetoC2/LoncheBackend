@@ -47,7 +47,7 @@ const usersRoutes = Router();
  *       500:
  *         description: Internal server error
  */
-usersRoutes.post('/', usersController.createUser);
+usersRoutes.post('/', usersController.create);
 
 /**
  * @swagger
@@ -84,7 +84,7 @@ usersRoutes.get('/', usersController.getAll);
  *       500:
  *         description: Internal server error
  */
-usersRoutes.get('/:id', usersController.getUserByID);
+usersRoutes.get('/:id', usersController.getById);
 
 /**
  *  @swagger
@@ -127,7 +127,7 @@ usersRoutes.get('/:id', usersController.getUserByID);
  *        500:
  *          description: Internal server error
  */
-usersRoutes.put('/:id', usersController.updateUser);
+usersRoutes.put('/:id', usersController.update);
 
 /**
  * @swagger
@@ -150,6 +150,6 @@ usersRoutes.put('/:id', usersController.updateUser);
  *       500:
  *         description: Internal server error
  */
-usersRoutes.delete('/:id', usersController.deleteUser);
+usersRoutes.delete('/:id', usersController.delete);
 
 export default usersRoutes;
