@@ -3,7 +3,7 @@ import IUser from '../types/User';
 import ROLES from '../types/roles';
 import USER_STATUS from '../types/userStatus';
 
-interface User extends IUser, Document {}
+export interface User extends IUser, Document {}
 
 const UserSchema = new Schema({
   id_city: {

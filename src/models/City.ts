@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import LANGUAGES from '../types/languages';
 
-interface City extends Document {
+export interface City extends Document {
   name: string;
   region: string;
   country: string;

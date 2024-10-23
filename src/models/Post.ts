@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import CATEGORIES from '../types/categories';
 
-interface Post extends Document {
+export interface Post extends Document {
   id_city: Schema.Types.ObjectId;
   id_user: Schema.Types.ObjectId;
   title: string;
