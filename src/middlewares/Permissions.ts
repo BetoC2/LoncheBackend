@@ -13,6 +13,12 @@ const permissionsMiddleware = (allowedRoles: ROLES[], allowSelf: boolean) => {
         .json({ message: 'Unauthorized' });
       return;
     }
+    if (!user) {
+      res
+        .status(HTTP_STATUS_CODES.UNAUTHORIZED)
+        .json({ message: 'Unauthorized' });
+      return;
+    }
 
     if (
       allowedRoles.includes(user.role!) ||
