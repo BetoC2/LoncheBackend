@@ -9,6 +9,7 @@ connectDB();
 const app = express();
 const port = process.env.PORT ?? 3000;
 
+app.disable('x-powered-by');
 app.use(express.json());
 app.use(cookieParser(process.env.SECRET_COOKIE_KEY as string));
 app.use(routes);
