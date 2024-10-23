@@ -40,7 +40,12 @@ const citiesRoutes = Router();
  *       500:
  *         description: Internal server error
  */
-citiesRoutes.post('/', citiesController.create);
+citiesRoutes.post(
+  '/',
+  authMiddleware,
+  permissionsMiddleware([ROLES.ADMIN], false),
+  citiesController.create
+);
 
 /**
  * @swagger
@@ -117,7 +122,12 @@ citiesRoutes.get('/:id', citiesController.getById);
  *        500:
  *          description: Internal server error
  */
-citiesRoutes.put('/:id', citiesController.update);
+citiesRoutes.put(
+  '/:id',
+  authMiddleware,
+  permissionsMiddleware([ROLES.ADMIN], false),
+  citiesController.update
+);
 
 /**
  * @swagger
@@ -140,6 +150,11 @@ citiesRoutes.put('/:id', citiesController.update);
  *       500:
  *         description: Internal server error
  */
-citiesRoutes.delete('/:id', citiesController.delete);
+citiesRoutes.delete(
+  '/:id',
+  authMiddleware,
+  permissionsMiddleware([ROLES.ADMIN], false),
+  citiesController.delete
+);
 
 export default citiesRoutes;

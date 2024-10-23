@@ -1,5 +1,8 @@
 import { Router } from 'express';
 import usersController from '../controllers/usersController';
+import authMiddleware from '../middlewares/auth';
+import permissionsMiddleware from '../middlewares/Permissions';
+import ROLES from '../types/roles';
 
 const usersRoutes = Router();
 
@@ -127,7 +130,12 @@ usersRoutes.get('/:id', usersController.getById);
  *        500:
  *          description: Internal server error
  */
-usersRoutes.put('/:id', usersController.update);
+usersRoutes.put(
+  '/:id',
+  authMiddleware,
+  permissionsMiddleware([], true),
+  usersController.update
+);
 
 /**
  * @swagger
@@ -150,6 +158,11 @@ usersRoutes.put('/:id', usersController.update);
  *       500:
  *         description: Internal server error
  */
-usersRoutes.delete('/:id', usersController.delete);
+usersRoutes.delete(
+  '/:id',
+  authMiddleware,
+  permissionsMiddleware([ROLES.ADMIN], true),
+  usersController.delete
+);
 
 export default usersRoutes;

@@ -1,5 +1,8 @@
 import { Router } from 'express';
 import postsController from '../controllers/postsController';
+import authMiddleware from '../middlewares/auth';
+import permissionsMiddleware from '../middlewares/Permissions';
+import ROLES from '../types/roles';
 
 const postsRoutes = Router();
 
@@ -25,7 +28,7 @@ const postsRoutes = Router();
  *       400:
  *         description: Validation error
  */
-postsRoutes.post('/', postsController.create);
+postsRoutes.post('/', authMiddleware, postsController.create);
 
 /**
  * @swagger
@@ -107,7 +110,12 @@ postsRoutes.get('/:id', postsController.getById);
  *       500:
  *         description: Error updating post
  */
-postsRoutes.put('/:id', postsController.update);
+postsRoutes.put(
+  '/:id',
+  authMiddleware,
+  permissionsMiddleware([], true),
+  postsController.update
+);
 
 /**
  * @swagger
@@ -130,6 +138,11 @@ postsRoutes.put('/:id', postsController.update);
  *       500:
  *         description: Error deleting post
  */
-postsRoutes.delete('/:id', postsController.delete);
+postsRoutes.delete(
+  '/:id',
+  authMiddleware,
+  permissionsMiddleware([ROLES.ADMIN, ROLES.MODERATOR], true),
+  postsController.delete
+);
 
 export default postsRoutes;
