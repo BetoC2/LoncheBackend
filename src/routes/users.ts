@@ -122,14 +122,33 @@ usersRoutes.get('/:id', usersController.getById);
  *                  format: date
  *      responses:
  *        200:
- *          description: User updated successfully
- *        400:
- *          description: Validation error
+ *          description: User updated successfully (Authenticated with permissions)
+ *        403:
+ *          description: User authenticated but without sufficient permissions
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: "Authenticated but insufficient permissions"
+ *        401:
+ *          description: User not authenticated or invalid token
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    example: "Not authenticated"
  *        404:
  *          description: User not found
  *        500:
  *          description: Internal server error
  */
+
 usersRoutes.put(
   '/:id',
   authMiddleware,
@@ -152,12 +171,33 @@ usersRoutes.put(
  *           type: string
  *     responses:
  *       200:
- *         description: User deleted successfully
+ *         description: User deleted successfully (Authenticated with permissions)
+ *       403:
+ *         description: User authenticated but without sufficient permissions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Authenticated but insufficient permissions"
+ *       401:
+ *         description: User not authenticated or invalid token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Not authenticated"
  *       404:
  *         description: User not found
  *       500:
  *         description: Internal server error
  */
+
 usersRoutes.delete(
   '/:id',
   authMiddleware,
