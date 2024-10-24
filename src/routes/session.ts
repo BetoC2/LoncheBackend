@@ -231,6 +231,6 @@ sessionRoutes.post('/login', sessionController.login);
  *                   type: string
  *                   example: "Internal Server Error"
  */
-sessionRoutes.post('/register', sessionController.create);
+sessionRoutes.post('/register', sessionController.register);
 
 export default sessionRoutes;
