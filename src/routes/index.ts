@@ -4,7 +4,7 @@ import citiesRoutes from './cities';
 import postsRoutes from './posts';
 import usersRoutes from './users';
 import swaggerRoutes from './swagger';
-import loginRoutes from './login';
+import sessionRoutes from './session';
 
 const router = Router();
 
@@ -13,6 +13,6 @@ router.use('/comments', commentsRoutes);
 router.use('/cities', citiesRoutes);
 router.use('/posts', postsRoutes);
 router.use('/users', usersRoutes);
-router.use('/login', loginRoutes);
+router.use('/', sessionRoutes);
 
 export default router;

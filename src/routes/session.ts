@@ -1,8 +1,7 @@
 import { Router } from 'express';
-import loginController from '../controllers/loginController';
+import sessionController from '../controllers/sessionController';
 
-const loginRoutes = Router();
-
+const sessionRoutes = Router();
 /**
  * @swagger
  * /login:
@@ -76,7 +75,8 @@ const loginRoutes = Router();
  *                   type: string
  *                   example: "Internal Server Error"
  */
+sessionRoutes.post('/login', sessionController.login);
 
-loginRoutes.post('/', loginController.login);
+sessionRoutes.post('/register', sessionController.create);
 
-export default loginRoutes;
+export default sessionRoutes;
