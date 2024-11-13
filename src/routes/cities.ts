@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import citiesController from '../controllers/citiesController';
-import permissionsMiddleware from '../middlewares/Permissions';
-import authMiddleware from '../middlewares/auth';
+import { auth, permissions } from '../middlewares';
 import ROLES from '../types/roles';
 
 const citiesRoutes = Router();
@@ -42,8 +41,8 @@ const citiesRoutes = Router();
  */
 citiesRoutes.post(
   '/',
-  authMiddleware,
-  permissionsMiddleware([ROLES.ADMIN], false),
+  auth,
+  permissions([ROLES.ADMIN]),
   citiesController.create
 );
 
@@ -124,8 +123,8 @@ citiesRoutes.get('/:id', citiesController.getById);
  */
 citiesRoutes.put(
   '/:id',
-  authMiddleware,
-  permissionsMiddleware([ROLES.ADMIN], false),
+  auth,
+  permissions([ROLES.ADMIN]),
   citiesController.update
 );
 
@@ -152,8 +151,8 @@ citiesRoutes.put(
  */
 citiesRoutes.delete(
   '/:id',
-  authMiddleware,
-  permissionsMiddleware([ROLES.ADMIN], false),
+  auth,
+  permissions([ROLES.ADMIN]),
   citiesController.delete
 );
 

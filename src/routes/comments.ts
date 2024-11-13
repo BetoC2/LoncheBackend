@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import commentsController from '../controllers/commentsController';
-import permissionsMiddleware from '../middlewares/Permissions';
-import authMiddleware from '../middlewares/auth';
+import { auth, permissions, selfComment } from '../middlewares';
 import ROLES from '../types/roles';
 
 const commentsRoutes = Router();
@@ -41,7 +40,7 @@ const commentsRoutes = Router();
  *       500:
  *         description: Internal server error
  */
-commentsRoutes.post('/', authMiddleware, commentsController.create);
+commentsRoutes.post('/', auth, commentsController.create);
 
 /**
  * @swagger
@@ -122,8 +121,8 @@ commentsRoutes.get('/:id', commentsController.getById);
  */
 commentsRoutes.put(
   '/:id',
-  authMiddleware,
-  permissionsMiddleware([], true),
+  auth,
+  selfComment([ROLES.ADMIN]),
   commentsController.update
 );
 
@@ -150,8 +149,8 @@ commentsRoutes.put(
  */
 commentsRoutes.delete(
   '/:id',
-  authMiddleware,
-  permissionsMiddleware([ROLES.ADMIN, ROLES.MODERATOR], true),
+  auth,
+  selfComment([ROLES.ADMIN, ROLES.MODERATOR]),
   commentsController.delete
 );
 

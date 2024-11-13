@@ -10,7 +10,7 @@ declare global {
   }
 }
 
-const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const auth = (req: Request, res: Response, next: NextFunction) => {
   const signedUser = req.signedCookies.user;
   console.log('Signed cookie:', signedUser);
 
@@ -21,5 +21,3 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     res.status(401).json({ message: 'Unauthorized' });
   }
 };
-
-export default authMiddleware;
