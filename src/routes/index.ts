@@ -6,6 +6,8 @@ import usersRoutes from './users';
 import swaggerRoutes from './swagger';
 import sessionRoutes from './session';
 
+import path from 'path';
+
 const router = Router();
 
 router.use('/swagger', swaggerRoutes);
@@ -14,5 +16,14 @@ router.use('/cities', citiesRoutes);
 router.use('/posts', postsRoutes);
 router.use('/users', usersRoutes);
 router.use('/', sessionRoutes);
+
+router.get('/archivo1', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', '..', 'archivo1.html'));
+});
+
+// Configurar ruta para servir archivo2.html
+router.get('/archivo2', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', '..', 'archivo2.html'));
+});
 
 export default router;

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Notification Receiver</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      #notifications {
+        margin-top: 20px;
+      }
+      .notification {
+        padding: 10px;
+        margin-bottom: 5px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Notificaciones para Usuario: 671ae1165099e4fa27629ba0</h2>
+    <div id="notifications"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io('http://localhost:4321');
+      const id_receiver = '671ae1165099e4fa27629ba0'; // ID del usuario que recibirá las notificaciones
+
+      // Unirse a la sala del usuario que recibirá las notificaciones
+      socket.emit('joinRoom', id_receiver);
+
+      // Escuchar las notificaciones recibidas y mostrarlas en pantalla
+      socket.on('receiveNotification', (notification) => {
+        const notificationContainer = document.getElementById('notifications');
+        const notificationElement = document.createElement('div');
+        notificationElement.className = 'notification';
+
+        let message = `[${notification.timestamp}] ${notification.username} `;
+        if (notification.actionType === 'like') {
+          message += `le dio like a tu publicación con ID ${notification.id_post}.`;
+        } else if (notification.actionType === 'comment') {
+          message += `comentó en tu publicación con ID ${notification.id_post}.`;
+        } else if (notification.type === 'follow') {
+          message += 'comenzó a seguirte.';
+        }
+
+        notificationElement.innerText = message;
+        notificationContainer.appendChild(notificationElement);
+      });
+    </script>
+  </body>
+</html>
