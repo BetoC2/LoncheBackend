@@ -23,8 +23,7 @@ const corsOptions = {
 };
 
 // Uso de CORS
-//app.use(cors(corsOptions));
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser(process.env.SECRET_COOKIE_KEY as string));
 app.use(routes);
