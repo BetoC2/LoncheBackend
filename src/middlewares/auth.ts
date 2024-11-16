@@ -1,5 +1,5 @@
-//import cookieParser from 'cookie-parser';
 import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
 import User from '../types/User';
 
 declare global {
@@ -11,13 +11,17 @@ declare global {
 }
 
 export const auth = (req: Request, res: Response, next: NextFunction) => {
-  const signedUser = req.signedCookies.user;
-  console.log('Signed cookie:', signedUser);
+  const token = req.headers.authorization;
 
-  if (signedUser) {
-    req.user = JSON.parse(signedUser);
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized: Token missing' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as User;
+    req.user = decoded;
     next();
-  } else {
-    res.status(401).json({ message: 'Unauthorized' });
+  } catch (err) {
+    return res.status(401).json({ message: 'Unauthorized: Invalid token' });
   }
 };

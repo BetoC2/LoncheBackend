@@ -5,6 +5,8 @@ import { verifyPassword, hashPassword } from '../utils/password';
 import BaseController from '../utils/BaseController';
 import { User } from '../models/User';
 import { Model } from 'mongoose';
+import { generateToken } from '../utils/jwt';
+import { sendEmail } from '../utils/sendEmail';
 
 class sessionController extends BaseController<User> {
   constructor(model: Model<User>) {
@@ -30,10 +32,12 @@ class sessionController extends BaseController<User> {
                 .json({ message: 'Invalid username or password' });
             }
 
+            const token = generateToken(user);
+            const { password, ...filteredUser } = user;
+            console.log(filteredUser);
             res
-              .cookie('user', JSON.stringify(user), { signed: true })
               .status(HTTP_STATUS_CODES.OK)
-              .json({ message: 'Login successful' });
+              .json({ token, user: filteredUser });
           })
           .catch((error) => {
             console.log(error);
@@ -52,6 +56,7 @@ class sessionController extends BaseController<User> {
 
   register = (req: Request, res: Response) => {
     const userData = req.body;
+    const { username, email } = userData;
 
     const {
       followers,
@@ -70,18 +75,20 @@ class sessionController extends BaseController<User> {
         return userModel.create(filteredUserData);
       })
       .then((newUser: User) => {
+        const token = generateToken(newUser);
+        const { password, ...filteredUser } = newUser;
+        console.log(filteredUser);
+
         return res
-          .cookie('user', JSON.stringify(newUser), { signed: true })
           .status(HTTP_STATUS_CODES.CREATED)
-          .json(
-            newUser.toObject({
-              versionKey: false,
-              transform: (doc, ret) => {
-                delete ret.password; // Eliminar la contraseña del objeto a devolver
-                return ret;
-              },
-            })
-          );
+          .json({ token, user: filteredUser });
+      })
+      .then(() => {
+        try {
+          sendEmail(email, username);
+        } catch (err) {
+          res.sendStatus(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+        }
       })
       .catch((error) => this.handleError(res, error, 'Error creating user'));
   };
