@@ -79,16 +79,15 @@ class sessionController extends BaseController<User> {
         const { password, ...filteredUser } = newUser;
         console.log(filteredUser);
 
+        // try {
+        //   sendEmail(email, username);
+        // } catch (err) {
+        //   res.sendStatus(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+        // }
+
         return res
           .status(HTTP_STATUS_CODES.CREATED)
           .json({ token, user: filteredUser });
-      })
-      .then(() => {
-        try {
-          sendEmail(email, username);
-        } catch (err) {
-          res.sendStatus(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
-        }
       })
       .catch((error) => this.handleError(res, error, 'Error creating user'));
   };

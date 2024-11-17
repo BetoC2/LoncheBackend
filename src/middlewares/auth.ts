@@ -10,18 +10,19 @@ declare global {
   }
 }
 
-export const auth = (req: Request, res: Response, next: NextFunction) => {
+export const auth = (req: Request, res: Response, next: NextFunction): void => {
   const token = req.headers.authorization;
 
   if (!token) {
-    return res.status(401).json({ message: 'Unauthorized: Token missing' });
+    res.status(401).json({ message: 'Unauthorized: Token missing' });
+    return; 
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as User;
     req.user = decoded;
-    next();
+    next(); 
   } catch (err) {
-    return res.status(401).json({ message: 'Unauthorized: Invalid token' });
+    res.status(401).json({ message: 'Unauthorized: Invalid token' });
   }
 };
