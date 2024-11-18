@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 import fs from 'node:fs';
 import path from 'node:path';
 
-export const sendEmail = (to: string, user: string) => {
+export const sendEmail = (to: string, user: string): Promise<void> => {
   const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: Number(process.env.EMAIL_PORT),
@@ -10,10 +10,12 @@ export const sendEmail = (to: string, user: string) => {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASSWORD,
     },
+    //debug: true,
+    //logger: true,
   });
 
   const file = fs.readFileSync(
-    path.join(__dirname, '..', 'views', 'emails', 'sample.html')
+    path.join(__dirname, '..', 'views', 'mail.template.html')
   );
   const html = file
     .toString()
@@ -24,16 +26,11 @@ export const sendEmail = (to: string, user: string) => {
     from: process.env.EMAIL_USER,
     to,
     subject: '¡Bienvenido a Lonche!',
-    text: `Bienvenido a lonche, ${user}, parece que tu proveedor de correo no soporta HTML`,
+    text: `Bienvenido a Lonche, ${user}, parece que tu proveedor de correo no soporta HTML`,
     html,
   };
 
-  transporter
-    .sendMail(mailOptions)
-    .then((response) => {
-      console.log('Response: ', response);
-    })
-    .catch((error) => {
-      console.log('Error: ', error);
-    });
+  return transporter.sendMail(mailOptions).then(() => {
+    console.log('Email sent successfully to:', to);
+  });
 };

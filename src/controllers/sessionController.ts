@@ -13,6 +13,16 @@ class sessionController extends BaseController<User> {
     super(model);
   }
 
+  private filterUser(user: User) {
+    return user.toObject({
+      versionKey: false,
+      transform: (doc, ret) => {
+        delete ret.password;
+        return ret;
+      },
+    });
+  }
+
   login = (req: Request, res: Response) => {
     const { email, password } = req.body;
 
@@ -24,6 +34,7 @@ class sessionController extends BaseController<User> {
             .status(HTTP_STATUS_CODES.NOT_FOUND)
             .json({ message: 'Invalid username or password' });
         }
+
         verifyPassword(password, user.password as string)
           .then((isPasswordCorrect) => {
             if (!isPasswordCorrect) {
@@ -32,22 +43,22 @@ class sessionController extends BaseController<User> {
                 .json({ message: 'Invalid username or password' });
             }
 
-            const token = generateToken(user);
-            const { password, ...filteredUser } = user;
-            console.log(filteredUser);
+            const token = generateToken(user.toObject({ versionKey: false }));
+            const filteredUser = this.filterUser(user);
+
             res
               .status(HTTP_STATUS_CODES.OK)
               .json({ token, user: filteredUser });
           })
           .catch((error) => {
-            console.log(error);
+            console.error(error);
             return res
               .status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
               .json({ message: 'Internal Server Error' });
           });
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         return res
           .status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
           .json({ message: 'Internal Server Error' });
@@ -56,7 +67,6 @@ class sessionController extends BaseController<User> {
 
   register = (req: Request, res: Response) => {
     const userData = req.body;
-    const { username, email } = userData;
 
     const {
       followers,
@@ -72,22 +82,26 @@ class sessionController extends BaseController<User> {
     hashPassword(filteredUserData.password)
       .then((hashedPassword) => {
         filteredUserData.password = hashedPassword;
-        return userModel.create(filteredUserData);
+        return this.model.create(filteredUserData);
       })
       .then((newUser: User) => {
         const token = generateToken(newUser);
-        const { password, ...filteredUser } = newUser;
-        console.log(filteredUser);
+        const filteredUser = this.filterUser(newUser);
 
-        // try {
-        //   sendEmail(email, username);
-        // } catch (err) {
-        //   res.sendStatus(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
-        // }
-
-        return res
-          .status(HTTP_STATUS_CODES.CREATED)
-          .json({ token, user: filteredUser });
+        return sendEmail(filteredUser.email, filteredUser.username)
+          .then(() => {
+            res
+              .status(HTTP_STATUS_CODES.CREATED)
+              .json({ token, user: filteredUser });
+          })
+          .catch((emailError) => {
+            console.error('Error sending email:', emailError);
+            res.status(HTTP_STATUS_CODES.CREATED).json({
+              token,
+              user: filteredUser,
+              emailError: 'Email failed',
+            });
+          });
       })
       .catch((error) => this.handleError(res, error, 'Error creating user'));
   };
