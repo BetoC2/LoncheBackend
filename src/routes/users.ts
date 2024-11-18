@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import usersController from '../controllers/usersController';
-import { auth, selfUser } from '../middlewares';
+import { auth, selfUser, uploadS3 } from '../middlewares';
 import ROLES from '../types/roles';
 
 const usersRoutes = Router();
@@ -148,7 +148,13 @@ usersRoutes.get('/:id', usersController.getById);
  *          description: Internal server error
  */
 
-usersRoutes.put('/:id', auth, selfUser(), usersController.update);
+usersRoutes.put(
+  '/:id',
+  auth,
+  selfUser(),
+  uploadS3.single('file'),
+  usersController.update
+);
 
 /**
  * @swagger

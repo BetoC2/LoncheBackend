@@ -74,6 +74,10 @@ class UsersController extends BaseController<User> {
     const { id } = req.params;
     const userData = req.body;
 
+    if (req.file) {
+      userData.profilePic = (req.file as Express.MulterS3.File).location;
+    }
+
     this.model
       .findByIdAndUpdate(id, userData, { new: true })
       .select('-password') // Excluir el campo password

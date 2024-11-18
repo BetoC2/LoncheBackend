@@ -88,7 +88,7 @@ class sessionController extends BaseController<User> {
         const token = generateToken(newUser);
         const filteredUser = this.filterUser(newUser);
 
-        return sendEmail(filteredUser.email, filteredUser.username)
+        sendEmail(filteredUser.email, filteredUser.username)
           .then(() => {
             res
               .status(HTTP_STATUS_CODES.CREATED)

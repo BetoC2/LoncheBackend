@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import postsController from '../controllers/postsController';
-import { auth, permissions, selfPost } from '../middlewares';
+import { auth, selfPost, uploadS3 } from '../middlewares';
 import ROLES from '../types/roles';
 
 const postsRoutes = Router();
@@ -27,7 +27,7 @@ const postsRoutes = Router();
  *       400:
  *         description: Validation error
  */
-postsRoutes.post('/', auth, postsController.create);
+postsRoutes.post('/', auth, uploadS3.single('file'), postsController.create);
 
 /**
  * @swagger
@@ -109,7 +109,13 @@ postsRoutes.get('/:id', postsController.getById);
  *       500:
  *         description: Error updating post
  */
-postsRoutes.put('/:id', auth, selfPost(), postsController.update);
+postsRoutes.put(
+  '/:id',
+  auth,
+  selfPost(),
+  uploadS3.single('file'),
+  postsController.update
+);
 
 /**
  * @swagger

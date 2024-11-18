@@ -1,12 +1,12 @@
-import express from 'express';
 import { config } from 'dotenv';
+config();
+import express from 'express';
 import { connectDB } from './config/db';
 import cors from 'cors';
 import routes from './routes';
 import cookieParser from 'cookie-parser';
 import { initializeSocket } from './sockets';
 
-config();
 connectDB();
 
 const app = express();
