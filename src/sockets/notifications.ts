@@ -10,6 +10,7 @@ const handleNotificationEvents = (socket: Socket) => {
   });
 
   socket.on('sendPostNotification', (data: NotificationPayload) => {
+    // comment | like
     const { id_user, id_post, id_receiver, username, actionType } = data;
     const timestamp = new Date().toISOString();
 
@@ -42,5 +43,11 @@ const handleNotificationEvents = (socket: Socket) => {
     console.log('Follow notification sent:', notification);
   });
 };
+
+// GET /api/notifications/:id
+// -> TODAS las notificaiónes de un usuario
+// 1 - Modelo y socket
+// 2 - Controlador para el GET
+// 3 - Ruta para el GET
 
 export default handleNotificationEvents;
