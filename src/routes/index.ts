@@ -5,6 +5,8 @@ import postsRoutes from './posts';
 import usersRoutes from './users';
 import swaggerRoutes from './swagger';
 import sessionRoutes from './session';
+import notificationsRoutes from './notifications';
+
 
 import path from 'path';
 
@@ -15,7 +17,10 @@ router.use('/comments', commentsRoutes);
 router.use('/cities', citiesRoutes);
 router.use('/posts', postsRoutes);
 router.use('/users', usersRoutes);
+router.use('/notifications', notificationsRoutes);
 router.use('/', sessionRoutes);
+
+
 
 router.get('/archivo1', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '..', 'archivo1.html'));
