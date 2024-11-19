@@ -47,7 +47,7 @@ postsRoutes.post('/', auth, uploadS3.single('file'), postsController.create);
  *       500:
  *         description: Error getting posts
  */
-postsRoutes.get('/', postsController.getAll);
+postsRoutes.get('/', auth, postsController.getAll);
 
 /**
  * @swagger
