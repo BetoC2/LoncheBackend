@@ -25,6 +25,19 @@ class PostsController extends BaseController<Post> {
       );
   };
 
+  getAll = (req: Request, res: Response) => {
+    const exclude = req.query.exclude === 'true';
+
+    const query = exclude ? { id_user: { $ne: req.user!._id } } : {}; // Sin exclusiones
+
+    this.model
+      .find(query)
+      .then((items: Post[]) => res.status(HTTP_STATUS_CODES.OK).json(items))
+      .catch((error: any) =>
+        this.handleError(res, error, 'Error fetching items')
+      );
+  };
+
   update = (req: Request, res: Response) => {
     const { id } = req.params;
     const content = req.body;
