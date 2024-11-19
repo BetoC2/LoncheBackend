@@ -9,7 +9,7 @@ export interface Post extends Document {
   category: CATEGORIES;
   creationDate?: Date;
   likes: number;
-  dislikes: number;
+  likesIds?: Schema.Types.ObjectId[];
   numComments: number;
   mediaURL?: string;
 }
@@ -53,10 +53,9 @@ const PostSchema = new Schema({
     default: 0,
     min: [0, 'Likes cannot be negative'],
   },
-  dislikes: {
-    type: Number,
-    default: 0,
-    min: [0, 'Dislikes cannot be negative'],
+  likesUsers: {
+    type: Array<String>,
+    default: [],
   },
   numComments: {
     type: Number,
@@ -66,7 +65,7 @@ const PostSchema = new Schema({
   mediaURL: {
     type: String,
     match: [
-      /^https?:\/\/.+\.(jpg|jpeg|png|gif|mp4|mkv)$/,
+      /^https?:\/\/.+\.(jpg|jpeg|png)$/,
       'Media URL must be a valid image or video URL',
     ],
   },
