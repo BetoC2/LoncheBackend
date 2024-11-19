@@ -35,12 +35,13 @@ export const selfPost = (allowedRoles?: ROLES[]) => {
           .status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
           .json({ message: 'Internal server error' });
       }
-      if ((post as Post).id_user !== user!._id) {
+      if ((post as Post).id_user.toString() !== user!._id) {
         return res
           .status(HTTP_STATUS_CODES.FORBIDDEN)
           .json({ message: 'You are not allowed to perform this action' });
       }
       if (allowedRoles && !allowedRoles.includes(user!.role!)) {
+        console.log('not allowed role');
         return res
           .status(HTTP_STATUS_CODES.FORBIDDEN)
           .json({ message: 'You are not allowed to perform this action' });

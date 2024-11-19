@@ -35,7 +35,7 @@ export const selfComment = (allowedRoles?: ROLES[]) => {
           .status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
           .json({ message: 'Internal server error' });
       }
-      if ((comment as Comment).id_user !== user!._id) {
+      if ((comment as Comment).id_user.toString() !== user!._id) {
         return res
           .status(HTTP_STATUS_CODES.FORBIDDEN)
           .json({ message: 'You are not allowed to perform this action' });
