@@ -1,5 +1,6 @@
 import { Socket } from 'socket.io';
 import NotificationPayload from '../types/NotificationPayload';
+import Notification from '../models/Notification';
 
 const handleNotificationEvents = (socket: Socket) => {
   console.log('Handling notification events');
@@ -9,38 +10,73 @@ const handleNotificationEvents = (socket: Socket) => {
     console.log(`User joined room: ${userId}`);
   });
 
-  socket.on('sendPostNotification', (data: NotificationPayload) => {
+  socket.on('sendPostNotification', async (data: NotificationPayload) => {
     // comment | like
     const { id_user, id_post, id_receiver, username, actionType } = data;
     const timestamp = new Date().toISOString();
 
     //TODO: Añadir registro a la base de datos
-    const notification = {
-      id_user,
-      id_post,
-      username,
-      actionType,
-      timestamp,
-    };
+    // const notification = {
+    //   id_user,
+    //   id_post,
+    //   username,
+    //   actionType,
+    //   timestamp,
+    // };
+    // Crear una notificación con el post asociado
+    const newNotification = new Notification({
+      sender: id_user,
+      receiver: id_receiver,
+      type: actionType, // like | comment
+      post: id_post, // ID del post
+      timestamp: timestamp,
+    });
 
-    socket.to(id_receiver).emit('receiveNotification', notification);
-    console.log('Notification sent:', notification);
+    try {
+      // Guardar la notificación en la base de datos
+      await newNotification.save();
+      console.log('Notification saved to database:', newNotification);
+
+      // Emitir la notificación al receptor
+      const notification = {
+        username,
+        actionType,
+        id_post,
+        timestamp,
+      };
+      socket.to(id_receiver).emit('receiveNotification', notification);
+    } catch (error) {
+      console.error('Error saving notification to database:', error);
+    }
   });
 
-  socket.on('sendFollowNotification', (data: NotificationPayload) => {
+  socket.on('sendFollowNotification', async (data: NotificationPayload) => {
     const { id_user, username, id_receiver } = data;
     const timestamp = new Date().toISOString();
 
-    //TODO: Añadir registro a la base de datos
-    const notification = {
+    // Crear la notificación en la base de datos
+    const newNotification = new Notification({
+      sender: id_user,
+      receiver: id_receiver,
       type: 'follow',
-      id_user,
-      username,
-      timestamp,
-    };
+      timestamp: timestamp,
+    });
 
-    socket.to(id_receiver).emit('receiveNotification', notification);
-    console.log('Follow notification sent:', notification);
+    try {
+      // Guardar la notificación en la base de datos
+      await newNotification.save();
+      console.log('Follow notification saved to database:', newNotification);
+
+      // Emitir la notificación al receptor
+      const notification = {
+        type: 'follow',
+        username,
+        timestamp,
+      };
+      socket.to(id_receiver).emit('receiveNotification', notification);
+    } catch (error) {
+      console.error('Error saving follow notification to database:', error);
+    }
   });
 };
 

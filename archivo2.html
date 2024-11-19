@@ -25,8 +25,8 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      const socket = io('http://localhost:1234');
-      const id_receiver = '671ae1165099e4fa27629ba0'; // ID del usuario que recibirá las notificaciones
+      const socket = io('http://localhost:3000');
+      const id_receiver = '671afa12a844d7c42ae08a4a'; // ID del usuario que recibirá las notificaciones
 
       // Unirse a la sala del usuario que recibirá las notificaciones
       socket.emit('joinRoom', id_receiver);

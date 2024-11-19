@@ -29,3 +29,18 @@ Content-Type: application/json
 {
     "content":"Primero hay que eliminar a la competencia, bla bla bla\nmas rapido que el viento, mas audaz que el aguila bla bla bla" 
 }
+
+### Get user notifications
+GET http://localhost:3000/notifications/api/notifications/671afa12a844d7c42ae08a4a HTTP/1.1
+
+### Post notification
+POST http://localhost:3000/notifications/api/notifications
+Content-Type: application/json
+
+{
+  "sender": "67377888acf57b5e6a68838c",
+  "receiver": "671afa12a844d7c42ae08a4a",
+  "type": "comment",
+  "post": "60c72b2f5f1b2c001f0a8b6f",
+  "date": "2024-11-18T15:00:00Z"
+}
