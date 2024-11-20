@@ -33,6 +33,7 @@ class PostsController extends BaseController<Post> {
 
     this.model
       .find(query)
+      .sort({ creationDate: -1 })
       .then((items: Post[]) => res.status(HTTP_STATUS_CODES.OK).json(items))
       .catch((error: any) =>
         this.handleError(res, error, 'Error fetching items')
