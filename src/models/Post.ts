@@ -4,6 +4,7 @@ import CATEGORIES from '../types/categories';
 export interface Post extends Document {
   id_city: Schema.Types.ObjectId;
   id_user: Schema.Types.ObjectId;
+  username: string;
   title: string;
   content: string;
   category: CATEGORIES;
@@ -24,6 +25,10 @@ const PostSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: [true, 'User ID is required'],
+  },
+  username: {
+    type: String,
+    required: [true, 'Username is required'],
   },
   title: {
     type: String,

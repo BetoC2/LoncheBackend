@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getNotifications, createNotification } from '../controllers/notificationsController';
+import notificationController from '../controllers/notificationsController';
 
 const router = Router();
 
@@ -43,7 +43,7 @@ const router = Router();
  *       500:
  *         description: Internal server error
  */
-router.get('/api/notifications/:id', getNotifications);
+router.get('/:id', notificationController.getNotifications);
 
 /**
  * @swagger
@@ -98,6 +98,6 @@ router.get('/api/notifications/:id', getNotifications);
  *       500:
  *         description: Internal server error
  */
-router.post('/api/notifications/', createNotification);
+router.post('/', notificationController.createNotification);
 
 export default router;

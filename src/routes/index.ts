@@ -18,7 +18,7 @@ router.use('/cities', citiesRoutes);
 router.use('/posts', postsRoutes);
 router.use('/users', usersRoutes);
 router.use('/notifications', notificationsRoutes);
-router.use('/likes', likesRoutes);
+router.use('/', likesRoutes);
 router.use('/', sessionRoutes);
 
 router.get('/archivo1', (req, res) => {

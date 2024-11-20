@@ -19,7 +19,7 @@ const corsOptions = {
   origin: process.env.WEB_URL,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'auth'],
+  allowedHeaders: ['*'],
 };
 
 // Uso de CORS

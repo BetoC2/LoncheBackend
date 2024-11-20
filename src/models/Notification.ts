@@ -2,6 +2,7 @@ import { Schema, model } from 'mongoose';
 
 const notificationSchema = new Schema({
   sender: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // Referencia al usuario que envía la notificación
+  username: { type: String, required: true }, // Nombre de usuario del remitente
   receiver: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // Referencia al usuario que recibe la notificación
   type: {
     type: String,

@@ -65,6 +65,13 @@ usersRoutes.post('/', usersController.create);
  */
 usersRoutes.get('/', usersController.getAll);
 
+//TODO: Add swagger documentation
+usersRoutes.get('/suggestions', auth, usersController.suggestions);
+
+//TODO: Add swagger documentation
+usersRoutes.post('/follow/:id', auth, usersController.follow);
+usersRoutes.post('/unfollow/:id', auth, usersController.unfollow);
+
 /**
  * @swagger
  * /users/{id}:
@@ -147,7 +154,6 @@ usersRoutes.get('/:id', usersController.getById);
  *        500:
  *          description: Internal server error
  */
-
 usersRoutes.put(
   '/:id',
   auth,

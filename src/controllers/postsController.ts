@@ -13,6 +13,7 @@ class PostsController extends BaseController<Post> {
   create = (req: Request, res: Response) => {
     const content = req.body;
     content.id_user = req.user!._id;
+    content.username = req.user!.username;
 
     if (req.file) {
       content.mediaURL = (req.file as Express.MulterS3.File).location;

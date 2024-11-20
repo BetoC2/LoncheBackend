@@ -27,6 +27,7 @@ const handleNotificationEvents = (socket: Socket) => {
     const newNotification = new Notification({
       sender: id_user,
       receiver: id_receiver,
+      username: username,
       type: actionType, // like | comment
       post: id_post, // ID del post
       timestamp: timestamp,
@@ -52,12 +53,14 @@ const handleNotificationEvents = (socket: Socket) => {
 
   socket.on('sendFollowNotification', async (data: NotificationPayload) => {
     const { id_user, username, id_receiver } = data;
+    console.log('Sexooo:', data);
     const timestamp = new Date().toISOString();
 
     // Crear la notificación en la base de datos
     const newNotification = new Notification({
       sender: id_user,
       receiver: id_receiver,
+      username: username,
       type: 'follow',
       timestamp: timestamp,
     });

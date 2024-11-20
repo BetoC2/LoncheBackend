@@ -4,7 +4,7 @@ import userModel, { User } from '../models/User';
 
 import HTTP_STATUS_CODES from '../types/http-status-codes';
 import { hashPassword } from '../utils/password';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 
 class UsersController extends BaseController<User> {
   constructor(model: Model<User>) {
@@ -47,7 +47,9 @@ class UsersController extends BaseController<User> {
   getAll = (req: Request, res: Response) => {
     this.model
       .find()
-      .select('-password') // Excluir el campo password
+      .select(
+        'id_city username profilePic bio joinDate numFollowers numFollowing'
+      )
       .then((results) => {
         return res.status(HTTP_STATUS_CODES.OK).json(results);
       })
@@ -58,7 +60,9 @@ class UsersController extends BaseController<User> {
     const { id } = req.params;
     this.model
       .findById(id)
-      .select('-password') // Excluir el campo password
+      .select(
+        'id_city username profilePic bio joinDate numFollowers numFollowing'
+      )
       .then((user) => {
         if (!user) {
           return res
@@ -68,6 +72,24 @@ class UsersController extends BaseController<User> {
         return res.status(HTTP_STATUS_CODES.OK).json(user);
       })
       .catch((error) => this.handleError(res, error, 'Error fetching user'));
+  };
+
+  suggestions = (req: Request, res: Response) => {
+    const id = req.user!._id as string;
+
+    this.model
+      .find({ _id: { $ne: id } })
+      .select(
+        'id_city username profilePic bio joinDate numFollowers numFollowing'
+      )
+      .sort({ numFollowers: -1 })
+      .limit(10)
+      .then((users) => {
+        return res.status(HTTP_STATUS_CODES.OK).json(users);
+      })
+      .catch((error) =>
+        this.handleError(res, error, 'Error fetching user suggestions')
+      );
   };
 
   update = (req: Request, res: Response) => {
@@ -107,6 +129,106 @@ class UsersController extends BaseController<User> {
         return res.status(HTTP_STATUS_CODES.OK).json(deletedUser);
       })
       .catch((error) => this.handleError(res, error, 'Error deleting user'));
+  };
+
+  follow = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { _id: followerId } = req.user!;
+
+    try {
+      const userExists = await this.model.findOne({ _id: id });
+
+      if (!userExists) {
+        res
+          .status(HTTP_STATUS_CODES.NOT_FOUND)
+          .json({ message: 'User not found' });
+        return;
+      }
+
+      const alreadyFollowing = await this.model.findOne({
+        _id: id,
+        followers: followerId,
+      });
+
+      if (alreadyFollowing) {
+        res
+          .status(HTTP_STATUS_CODES.BAD_REQUEST)
+          .json({ message: 'Already following this user' });
+        return;
+      }
+
+      await this.model.updateOne(
+        { _id: id },
+        {
+          $addToSet: { followers: followerId },
+          $inc: { numFollowers: 1 },
+        }
+      );
+      await this.model.updateOne(
+        { _id: followerId },
+        {
+          $addToSet: { following: id },
+          $inc: { numFollowing: 1 },
+        }
+      );
+
+      res.status(HTTP_STATUS_CODES.OK).json({ message: 'Followed' });
+    } catch (error) {
+      console.error('Error following user:', error);
+      res
+        .status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
+        .json({ message: 'Internal server error' });
+    }
+  };
+
+  unfollow = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { _id: followerId } = req.user!;
+
+    try {
+      const userExists = await this.model.findOne({ _id: id });
+
+      if (!userExists) {
+        res
+          .status(HTTP_STATUS_CODES.NOT_FOUND)
+          .json({ message: 'User not found' });
+        return;
+      }
+
+      const isFollowing = await this.model.findOne({
+        _id: id,
+        followers: followerId,
+      });
+
+      if (!isFollowing) {
+        res
+          .status(HTTP_STATUS_CODES.BAD_REQUEST)
+          .json({ message: 'Not following this user' });
+        return;
+      }
+
+      await this.model.updateOne(
+        { _id: id },
+        {
+          $pull: { followers: followerId },
+          $inc: { numFollowers: -1 },
+        }
+      );
+      await this.model.updateOne(
+        { _id: followerId },
+        {
+          $pull: { following: id },
+          $inc: { numFollowing: -1 },
+        }
+      );
+
+      res.status(HTTP_STATUS_CODES.OK).json({ message: 'Unfollowed' });
+    } catch (error) {
+      console.error('Error unfollowing user:', error);
+      res
+        .status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
+        .json({ message: 'Internal server error' });
+    }
   };
 }
 
