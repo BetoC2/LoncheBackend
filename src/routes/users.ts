@@ -158,7 +158,7 @@ usersRoutes.put(
   '/:id',
   auth,
   selfUser(),
-  uploadS3.single('file'),
+  uploadS3.single('profilePic'),
   usersController.update
 );
 

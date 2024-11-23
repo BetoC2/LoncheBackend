@@ -95,14 +95,16 @@ class UsersController extends BaseController<User> {
   update = (req: Request, res: Response) => {
     const { id } = req.params;
     const userData = req.body;
-
+  
     if (req.file) {
-      userData.profilePic = (req.file as Express.MulterS3.File).location;
+      userData.profilePic = (req.file as Express.MulterS3.File).location; 
+    } else {
+      delete userData.profilePic; 
     }
-
+  
     this.model
       .findByIdAndUpdate(id, userData, { new: true })
-      .select('-password') // Excluir el campo password
+      .select('-password') 
       .then((updatedUser) => {
         if (!updatedUser) {
           return res
@@ -113,6 +115,7 @@ class UsersController extends BaseController<User> {
       })
       .catch((error) => this.handleError(res, error, 'Error updating user'));
   };
+  
 
   delete = (req: Request, res: Response) => {
     const { id } = req.params;
