@@ -61,7 +61,7 @@ class UsersController extends BaseController<User> {
     this.model
       .findById(id)
       .select(
-        'id_city username profilePic bio joinDate numFollowers numFollowing'
+        'id_city username name lastname profilePic bio joinDate numFollowers numFollowing'
       )
       .then((user) => {
         if (!user) {
