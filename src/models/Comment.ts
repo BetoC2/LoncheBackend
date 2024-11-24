@@ -23,17 +23,7 @@ const CommentSchema = new Schema({
   content: {
     type: String,
     required: [true, 'Content is required'],
-    minlength: [5, 'Content must be at least 5 characters long'],
-  },
-  likes: {
-    type: Number,
-    default: 0,
-    min: [0, 'Likes cannot be negative'],
-  },
-  dislikes: {
-    type: Number,
-    default: 0,
-    min: [0, 'Dislikes cannot be negative'],
+    minlength: [1, 'Content must be at least 1 characters long'],
   },
   creationDate: {
     type: Date,

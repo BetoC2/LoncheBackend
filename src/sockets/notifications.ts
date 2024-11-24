@@ -15,15 +15,6 @@ const handleNotificationEvents = (socket: Socket) => {
     const { id_user, id_post, id_receiver, username, actionType } = data;
     const timestamp = new Date().toISOString();
 
-    //TODO: Añadir registro a la base de datos
-    // const notification = {
-    //   id_user,
-    //   id_post,
-    //   username,
-    //   actionType,
-    //   timestamp,
-    // };
-    // Crear una notificación con el post asociado
     const newNotification = new Notification({
       sender: id_user,
       receiver: id_receiver,
@@ -53,7 +44,6 @@ const handleNotificationEvents = (socket: Socket) => {
 
   socket.on('sendFollowNotification', async (data: NotificationPayload) => {
     const { id_user, username, id_receiver } = data;
-    console.log('Sexooo:', data);
     const timestamp = new Date().toISOString();
 
     // Crear la notificación en la base de datos
