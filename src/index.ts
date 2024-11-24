@@ -1,12 +1,12 @@
-import express from 'express';
 import { config } from 'dotenv';
+config();
+import express from 'express';
 import { connectDB } from './config/db';
 import cors from 'cors';
 import routes from './routes';
 import cookieParser from 'cookie-parser';
 import { initializeSocket } from './sockets';
 
-config();
 connectDB();
 
 const app = express();
@@ -16,10 +16,10 @@ app.disable('x-powered-by');
 
 // Configuración de CORS
 const corsOptions = {
-  origin: 'http://localhost:3000', //4200
+  origin: process.env.WEB_URL,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['*'],
 };
 
 // Uso de CORS
