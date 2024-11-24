@@ -5,9 +5,11 @@ const router = Router();
 
 /**
  * @swagger
- * /api/notifications/{id}:
+ * /notifications/api/notifications/{id}:
  *   get:
- *     summary: Get all notifications for a user
+ *     summary: Get notifications for a user
+ *     tags: 
+ *       - Notifications
  *     description: Retrieves all notifications for a user by their ID with an optional limit. If no limit is provided, it defaults to 10.
  *     parameters:
  *       - in: path
@@ -47,9 +49,11 @@ router.get('/:id', notificationController.getNotifications);
 
 /**
  * @swagger
- * /api/notifications/:
+ * notifications/api/notifications/:
  *   post:
  *     summary: Create a new notification
+ *     tags:
+ *       - Notifications
  *     description: Creates a new notification for a user based on the action type (like, comment, or follow).
  *     requestBody:
  *       required: true
