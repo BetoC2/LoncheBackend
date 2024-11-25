@@ -1,59 +1,59 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import session from 'express-session';
-import { Application } from 'express';
-import User from '../models/User'; // Importamos el modelo de usuario
-// import IUserDocument  from '../models/User';
-import { IUserDocument } from '../models/User'; 
+import { Router } from 'express';
+import User from '../types/User';
+import ROLES from '../types/roles';
+import USER_STATUS from '../types/userStatus';
+import mongoose from 'mongoose';
 
-export const googleAuth = (app: Application) => {
-    passport.use(
-        new GoogleStrategy(
-            {
-                clientID: process.env.GOOGLE_ID!,
-                clientSecret: process.env.GOOGLE_SECRET!,
-                callbackURL: process.env.GOOGLE_CALLBACK_URL!
-            },
-            async (accessToken, refreshToken, profile, done) => {
-                try {
-                    // Buscar si el usuario ya existe en la base de datos por el Google ID
-                    let user = await User.findOne({ googleId: profile.id });
+export const googleAuth = (router: Router) => {
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_ID!,
+        clientSecret: process.env.GOOGLE_SECRET!,
+        callbackURL: process.env.GOOGLE_CALLBACK_URL!,
+      },
+      (accessToken, refreshToken, profile, cb) => {
+        // Aquí puedes mapear los datos del perfil al esquema de tu usuario si es necesario
+        const user: User = {
+          _id: new mongoose.Types.ObjectId(),
+          name: profile.name?.familyName || '',
+          email: profile.emails?.[0].value || '',
+          status: USER_STATUS.ACTIVE,
+          role: ROLES.USER,
+          profilePic: profile.photos?.[0].value || '',
+          joinDate: new Date(),
+          numFollowers: 0,
+          numFollowing: 0,
+          lastname: profile.name?.familyName || '',
+          birthdate: new Date('2000-10-10'),
+          username: profile.emails?.[0].value.split('@')[0] || '',
+        };
 
-                    if (!user) {
-                        // Si no existe, creamos un nuevo usuario con los datos de Google
-                        user = new User({
-                            name: profile.displayName,
-                            email: profile.emails?.[0].value || '',
-                            profilePic: profile.photos?.[0].value || '', // Foto de perfil de Google
-                            status: 'ACTIVE', // Estado predeterminado
-                        });
+        console.log('User profile:', profile);
+        return cb(null, user);
+      }
+    )
+  );
 
-                        await user.save(); // Guardamos al usuario en la base de datos
-                    }
+  passport.serializeUser((user, cb) => {
+    cb(null, user); // Almacena los datos del usuario en la sesión
+  });
 
-                    return done(null, user); // Retorna el usuario
-                } catch (error) {
-                    console.error('Error al autenticar con Google:', error);
-                    return done(error, undefined);
-                }
-            }
-        )
-    );
+  passport.deserializeUser((user: User, cb) => {
+    cb(null, user); // Recupera los datos del usuario desde la sesión
+  });
 
-    passport.serializeUser((user, done) => {
-        done(null, user); // Almacena el usuario en la sesión
-    });
+  router.use(
+    session({
+      resave: false,
+      saveUninitialized: true,
+      secret: process.env.SECRET_KEY!,
+    })
+  );
 
-    passport.deserializeUser((user: unknown, done) => {
-        done(null, user as IUserDocument); // Usa el tipo correctamente
-    });
-
-    app.use(session({
-        resave: false,
-        saveUninitialized: true,
-        secret: process.env.SECRET_KEY || 'default_secret',
-    }));
-
-    app.use(passport.initialize());
-    app.use(passport.session());
+  router.use(passport.initialize());
+  router.use(passport.session());
 };

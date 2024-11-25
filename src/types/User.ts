@@ -4,7 +4,7 @@ import USER_STATUS from './userStatus';
 
 export default interface User {
   _id: unknown;
-  id_city: Schema.Types.ObjectId;
+  id_city?: Schema.Types.ObjectId;
   followers?: Schema.Types.ObjectId[];
   following?: Schema.Types.ObjectId[];
   username: string;
