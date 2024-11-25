@@ -81,10 +81,6 @@ const UserSchema = new Schema({
   },
   profilePic: {
     type: String,
-    match: [
-      /^https?:\/\/.+\.(jpg|jpeg|png|gif)$/,
-      'Profile picture must be a valid image URL',
-    ],
   },
   bio: {
     type: String,
