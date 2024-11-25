@@ -2,11 +2,13 @@
   "name": "lonche-api",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.ts",
-    "start": "ts-node src/index.ts"
+    "start": "node .",
+    "postinstall": "tsc"
+
   },
   "keywords": [],
   "author": "",
