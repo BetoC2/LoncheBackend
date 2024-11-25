@@ -22,7 +22,7 @@ const getComment = (id: string): Promise<Comment | number> => {
 export const selfComment = (allowedRoles?: ROLES[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const user = req.user;
+    const user = req.myUser;
 
     getComment(id).then((comment) => {
       if (comment === HTTP_STATUS_CODES.NOT_FOUND) {

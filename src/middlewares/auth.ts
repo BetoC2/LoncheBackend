@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import User from '../types/User';
+import MyUser from '../types/User';
 
 declare global {
   namespace Express {
     interface Request {
-      user?: User;
+      myUser?: MyUser;
     }
   }
 }
@@ -19,8 +19,11 @@ export const auth = (req: Request, res: Response, next: NextFunction): void => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as User;
-    req.user = decoded;
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET as string
+    ) as MyUser;
+    req.myUser = decoded;
     next();
   } catch (err) {
     res.status(401).json({ message: 'Unauthorized: Invalid token' });

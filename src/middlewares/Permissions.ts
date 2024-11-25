@@ -4,7 +4,7 @@ import ROLES from '../types/roles';
 
 export const permissions = (allowedRoles: ROLES[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user;
+    const user = req.myUser;
     if (!user) {
       res
         .status(HTTP_STATUS_CODES.UNAUTHORIZED)

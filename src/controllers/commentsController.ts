@@ -41,7 +41,7 @@ class CommentsController extends BaseController<Comment> {
     const { id } = req.params;
     const content = req.body;
 
-    content.id_user = req.user!._id;
+    content.id_user = req.myUser!._id;
 
     this.model
       .findByIdAndUpdate(id, content, { new: true, runValidators: true })

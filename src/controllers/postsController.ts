@@ -13,8 +13,8 @@ class PostsController extends BaseController<Post> {
 
   create = async (req: Request, res: Response) => {
     const content = req.body;
-    content.id_user = req.user!._id;
-    content.username = req.user!.username;
+    content.id_user = req.myUser!._id;
+    content.username = req.myUser!.username;
 
     if (req.file) {
       content.mediaURL = (req.file as Express.MulterS3.File).location;
@@ -53,7 +53,7 @@ class PostsController extends BaseController<Post> {
     const exclude = req.query.exclude === 'true';
     const popular = req.query.popular === 'true';
 
-    const query = exclude ? { id_user: { $ne: req.user!._id } } : {};
+    const query = exclude ? { id_user: { $ne: req.myUser!._id } } : {};
 
     const sortCriteria: { [key: string]: 1 | -1 } = popular
       ? { likes: -1 }

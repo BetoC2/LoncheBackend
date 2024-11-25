@@ -5,7 +5,7 @@ import HTTP_STATUS_CODES from '../types/http-status-codes';
 class LikesController {
   async likePost(req: Request, res: Response) {
     const { id } = req.params;
-    const username = req.user!.username;
+    const username = req.myUser!.username;
 
     if (!username) {
       res
@@ -46,7 +46,7 @@ class LikesController {
 
   async unlikePost(req: Request, res: Response) {
     const { id } = req.params;
-    const username = req.user!.username;
+    const username = req.myUser!.username;
 
     if (!username) {
       res

@@ -22,7 +22,7 @@ const getPost = (id: string): Promise<Post | number> => {
 export const selfPost = (allowedRoles?: ROLES[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const user = req.user;
+    const user = req.myUser;
 
     getPost(id).then((post) => {
       if (post === HTTP_STATUS_CODES.NOT_FOUND) {

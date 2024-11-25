@@ -4,7 +4,7 @@ import ROLES from '../types/roles';
 
 export const selfUser = (allowedRoles?: ROLES[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user;
+    const user = req.myUser;
     const { id } = req.params;
 
     if (allowedRoles && !allowedRoles.includes(user!.role!)) {

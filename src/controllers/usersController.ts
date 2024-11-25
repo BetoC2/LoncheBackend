@@ -75,7 +75,7 @@ class UsersController extends BaseController<User> {
   };
 
   suggestions = (req: Request, res: Response) => {
-    const id = req.user!._id as string;
+    const id = req.myUser!._id as string;
 
     this.model
       .find({ _id: { $ne: id } })
@@ -95,16 +95,16 @@ class UsersController extends BaseController<User> {
   update = (req: Request, res: Response) => {
     const { id } = req.params;
     const userData = req.body;
-  
+
     if (req.file) {
-      userData.profilePic = (req.file as Express.MulterS3.File).location; 
+      userData.profilePic = (req.file as Express.MulterS3.File).location;
     } else {
-      delete userData.profilePic; 
+      delete userData.profilePic;
     }
-  
+
     this.model
       .findByIdAndUpdate(id, userData, { new: true })
-      .select('-password') 
+      .select('-password')
       .then((updatedUser) => {
         if (!updatedUser) {
           return res
@@ -115,7 +115,6 @@ class UsersController extends BaseController<User> {
       })
       .catch((error) => this.handleError(res, error, 'Error updating user'));
   };
-  
 
   delete = (req: Request, res: Response) => {
     const { id } = req.params;
@@ -136,7 +135,7 @@ class UsersController extends BaseController<User> {
 
   follow = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { _id: followerId } = req.user!;
+    const { _id: followerId } = req.myUser!;
 
     try {
       const userExists = await this.model.findOne({ _id: id });
@@ -186,7 +185,7 @@ class UsersController extends BaseController<User> {
 
   unfollow = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { _id: followerId } = req.user!;
+    const { _id: followerId } = req.myUser!;
 
     try {
       const userExists = await this.model.findOne({ _id: id });
