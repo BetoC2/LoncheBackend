@@ -21,7 +21,6 @@ class PostsController extends BaseController<Post> {
     }
 
     try {
-      // Verificar si content.categories es un array y no está vacío
       if (
         !Array.isArray(content.categories) ||
         content.categories.length === 0
@@ -32,7 +31,6 @@ class PostsController extends BaseController<Post> {
         return;
       }
 
-      // Verificar que todas las categorías existen en la base de datos
       const categories = await categoriesModel.find({
         name: { $in: content.categories },
       });
@@ -44,7 +42,6 @@ class PostsController extends BaseController<Post> {
         return;
       }
 
-      // Crear el post si todas las categorías son válidas
       const post = await this.model.create(content);
       res.status(HTTP_STATUS_CODES.CREATED).json(post);
     } catch (error) {

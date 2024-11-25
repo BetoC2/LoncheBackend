@@ -30,6 +30,28 @@ class CategoriesController extends BaseController<Category> {
         this.handleError(res, error, 'Error fetching item')
       );
   };
+
+  getCategoriesByNames = async (req: Request, res: Response) => {
+    try {
+      const { names } = req.query;
+
+      if (!names || !Array.isArray(names)) {
+        res
+          .status(HTTP_STATUS_CODES.BAD_REQUEST)
+          .json({ message: 'Names must be an array of category names' });
+        return;
+      }
+
+      const categories = await this.model.find({
+        name: { $in: names },
+      });
+
+      res.status(HTTP_STATUS_CODES.OK).json(categories);
+      return;
+    } catch (error) {
+      this.handleError(res, error, 'Error fetching categories');
+    }
+  };
 }
 
 export default new CategoriesController(categoryModel);

@@ -1,5 +1,4 @@
 import mongoose, { Document, Schema } from 'mongoose';
-import CATEGORIES from '../types/categories';
 
 export interface Post extends Document {
   id_city: Schema.Types.ObjectId;
@@ -7,7 +6,7 @@ export interface Post extends Document {
   username: string;
   title: string;
   content: string;
-  category: CATEGORIES;
+  categories: string[];
   creationDate?: Date;
   likes: number;
   likesIds?: Schema.Types.ObjectId[];
@@ -41,13 +40,9 @@ const PostSchema = new Schema({
     required: [true, 'Content is required'],
     minlength: [10, 'Content must be at least 10 characters long'],
   },
-  category: {
-    type: String,
-    enum: {
-      values: Object.values(CATEGORIES),
-      message: '{VALUE} is not a valid category',
-    },
-    required: [true, 'Category is required'],
+  categories: {
+    type: Array<String>,
+    required: [true, 'Categories are required'],
   },
   creationDate: {
     type: Date,
