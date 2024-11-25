@@ -8,9 +8,11 @@ import sessionRoutes from './session';
 import notificationsRoutes from './notifications';
 import likesRoutes from './likes';
 import categoriesRoutes from './categories';
+import { googleAuth } from '../middlewares/google-auth';
 
 import { auth } from '../middlewares';
 const router = Router();
+googleAuth(router);
 
 router.use('/swagger', swaggerRoutes);
 router.use('/comments', commentsRoutes);

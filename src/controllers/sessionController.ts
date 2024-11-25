@@ -105,6 +105,44 @@ class sessionController extends BaseController<User> {
       })
       .catch((error) => this.handleError(res, error, 'Error creating user'));
   };
+
+  loginWithGoogle(req: Request, res: Response) {
+    const googleUser = req.user as User;
+
+    if (!googleUser || !googleUser.email) {
+      return res
+        .status(HTTP_STATUS_CODES.BAD_REQUEST)
+        .json({ message: 'No se pudo obtener el usuario de Google.' });
+    }
+
+    // Verificar si el usuario ya existe en la base de datos
+    this.model
+      .findOne({ email: googleUser.email })
+      .then((existingUser: User | null) => {
+        if (existingUser) {
+          const token = generateToken(existingUser);
+          return res.json({ token, user: existingUser });
+        }
+
+        const newUser = this.model
+          .create({
+            ...googleUser,
+            role: 'USER',
+            status: 'ACTIVE',
+            joinDate: new Date(),
+            numFollowers: 0,
+            numFollowing: 0,
+          })
+          .then((savedUser: User) => {
+            // Genera el token JWT para el nuevo usuario
+            const token = generateToken(savedUser);
+            res.json({ token, user: savedUser });
+          });
+      })
+      .catch(() => {
+        res.sendStatus(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+      });
+  }
 }
 
 export default new sessionController(userModel);

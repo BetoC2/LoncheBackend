@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import sessionController from '../controllers/sessionController';
+import passport from 'passport';
 
 const sessionRoutes = Router();
 /**
@@ -232,5 +233,20 @@ sessionRoutes.post('/login', sessionController.login);
  *                   example: "Internal Server Error"
  */
 sessionRoutes.post('/register', sessionController.register);
+
+sessionRoutes.get(
+  '/google',
+  passport.authenticate('google', {
+    scope: ['profile', 'email'],
+  })
+);
+
+sessionRoutes.get(
+  '/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  (req, res) => {
+    sessionController.loginWithGoogle(req, res);
+  }
+);
 
 export default sessionRoutes;
