@@ -242,7 +242,7 @@ sessionRoutes.get(
 );
 
 sessionRoutes.get(
-  '/google/callback',
+  '/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   (req, res) => {
     sessionController.loginWithGoogle(req, res);

@@ -10,10 +10,10 @@ import likesRoutes from './likes';
 import categoriesRoutes from './categories';
 import { googleAuth } from '../middlewares/google-auth';
 
-import { auth } from '../middlewares';
 const router = Router();
 googleAuth(router);
 
+router.use('/', sessionRoutes);
 router.use('/swagger', swaggerRoutes);
 router.use('/comments', commentsRoutes);
 router.use('/cities', citiesRoutes);
@@ -22,6 +22,5 @@ router.use('/users', usersRoutes);
 router.use('/notifications', notificationsRoutes);
 router.use('/categories', categoriesRoutes);
 router.use('/', likesRoutes);
-router.use('/', sessionRoutes);
 
 export default router;
