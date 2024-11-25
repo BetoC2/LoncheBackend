@@ -9,7 +9,6 @@ const UserSchema = new Schema({
   id_city: {
     type: Schema.Types.ObjectId,
     ref: 'City',
-    required: [true, 'City ID is required'],
   },
   followers: [
     {
@@ -38,7 +37,6 @@ const UserSchema = new Schema({
   },
   password: {
     type: String,
-    required: [true, 'Password is required'],
     minlength: [6, 'Password must be at least 6 characters long'],
   },
   name: {
