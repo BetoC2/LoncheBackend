@@ -54,3 +54,12 @@ Content-Type: application/json
   "email": "beto@correo2.com",
   "password": "salsa159"
 }
+
+### Login
+POST https://lonchebackend.onrender.com/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "beto@correo2.com",
+  "password": "salsa159"
+}
