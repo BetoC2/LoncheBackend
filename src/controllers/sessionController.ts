@@ -140,6 +140,7 @@ class sessionController extends BaseController<User> {
           // Genera el token JWT para el nuevo usuario
           const token = generateToken(savedUser);
           res.json({ token, user: savedUser });
+          res.redirect(`${process.env.WEB_URL}?token=${token}`);
         });
       })
       .catch(() => {

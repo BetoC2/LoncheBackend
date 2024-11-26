@@ -52,8 +52,18 @@ class PostsController extends BaseController<Post> {
   getAll = (req: Request, res: Response) => {
     const exclude = req.query.exclude === 'true';
     const popular = req.query.popular === 'true';
+    const tag = req.query.tag as string | undefined;
+    const id_city = req.query.city as string | undefined;
 
-    const query = exclude ? { id_user: { $ne: req.myUser!._id } } : {};
+    const query: any = exclude ? { id_user: { $ne: req.myUser!._id } } : {};
+
+    if (tag) {
+      query.categories = { $in: [tag] };
+    }
+
+    if (id_city) {
+      query.id_city = id_city;
+    }
 
     const sortCriteria: { [key: string]: 1 | -1 } = popular
       ? { likes: -1 }
@@ -61,8 +71,14 @@ class PostsController extends BaseController<Post> {
 
     this.model
       .find(query)
+      .populate({
+        path: 'id_city',
+      })
       .sort(sortCriteria)
-      .then((items: Post[]) => res.status(HTTP_STATUS_CODES.OK).json(items))
+      .then((items: Post[]) => {
+        res.status(HTTP_STATUS_CODES.OK).json(items);
+      })
+
       .catch((error: any) =>
         this.handleError(res, error, 'Error fetching items')
       );
