@@ -147,6 +147,24 @@ class sessionController extends BaseController<User> {
         res.sendStatus(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
       });
   }
+
+  profile = (req: Request, res: Response) => {
+    const id = req.myUser?._id;
+
+    this.model
+      .findById(id)
+      .select('-password')
+      .then((user) => {
+        if (!user) {
+          res
+            .status(HTTP_STATUS_CODES.NOT_FOUND)
+            .json({ message: 'User not found' });
+          return;
+        }
+
+        res.status(HTTP_STATUS_CODES.OK).json(user);
+      });
+  };
 }
 
 export default new sessionController(userModel);

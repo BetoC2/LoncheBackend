@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import sessionController from '../controllers/sessionController';
 import passport from 'passport';
+import { auth } from '../middlewares';
 
 const sessionRoutes = Router();
 /**
@@ -233,6 +234,8 @@ sessionRoutes.post('/login', sessionController.login);
  *                   example: "Internal Server Error"
  */
 sessionRoutes.post('/register', sessionController.register);
+
+sessionRoutes.get('/profile', auth, sessionController.profile);
 
 sessionRoutes.get(
   '/google',
