@@ -133,7 +133,8 @@ class sessionController extends BaseController<User> {
       .then((existingUser: User | null) => {
         if (existingUser) {
           const token = generateToken(existingUser);
-          return res.json({ token, user: existingUser });
+          res.redirect(`${process.env.WEB_URL}/callback?token=${token}`);
+          return;
         }
 
         this.model.create(filteredUserData).then((savedUser: User) => {
