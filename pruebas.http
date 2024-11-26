@@ -31,7 +31,7 @@ Content-Type: application/json
 }
 
 ### Get user notifications
-GET http://localhost:3000/notifications/api/notifications/671afa12a844d7c42ae08a4a HTTP/1.1
+GET http://localhost:1234/notifications/api/notifications/671afa12a844d7c42ae08a4a HTTP/1.1
 
 ### Post notification
 POST http://localhost:3000/notifications/api/notifications
@@ -43,4 +43,14 @@ Content-Type: application/json
   "type": "comment",
   "post": "60c72b2f5f1b2c001f0a8b6f",
   "date": "2024-11-18T15:00:00Z"
+}
+
+
+### Login
+POST http://localhost:1234/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "beto@correo2.com",
+  "password": "salsa159"
 }
