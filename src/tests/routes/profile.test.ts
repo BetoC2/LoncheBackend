@@ -10,7 +10,9 @@ const getToken = async () => {
   return response.body.token;
 };
 
-const checkProfileResponse = (response) => {
+import { Response } from 'supertest';
+
+const checkProfileResponse = (response: Response) => {
   expect(response.status).toBe(HTTP_STATUS_CODES.OK);
   expect(response.body).toHaveProperty('id_city');
   expect(response.body).toHaveProperty('username');

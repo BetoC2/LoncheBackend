@@ -3,7 +3,7 @@ import User from '../../models/User'; // Ajusta el path según tu estructura
 
 const createInvalidUser = () => new User(); // Función para crear un usuario inválido
 
-const validateUserError = async (user) => {
+const validateUserError = async (user: mongoose.Document) => {
     try {
         await user.validate();
     } catch (err) {
@@ -16,6 +16,7 @@ describe('User Model Validation', () => {
         const user = createInvalidUser();
         const error = await validateUserError(user);
         
-        expect(error.errors).toHaveProperty('email'); // Verifica que 'email' sea requerido
+        expect(error).toBeDefined();
+        expect(error!.errors).toHaveProperty('email'); // Verifica que 'email' sea requerido
     });
 });
