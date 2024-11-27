@@ -28,7 +28,16 @@
 
     Para entorno de producción:
 
-
     ```bash
     npm start
     ```
+
+## Correr el entorno de pruebas
+
+      npm run dev
+    
+   En una nueva consola correr:
+   
+      npm test
+
+    
