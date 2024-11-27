@@ -4,7 +4,7 @@ import handleNotificationEvents from './notifications';
 export const initializeSocket = (server: any) => {
   const io = new Server(server, {
     cors: {
-      origin: 'http://localhost:4200',
+      origin: process.env.WEB_URL,
       methods: ['GET', 'POST'],
       allowedHeaders: ['Content-Type'],
       credentials: true,
